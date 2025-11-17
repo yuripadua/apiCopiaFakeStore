@@ -11,6 +11,62 @@ API pedagógica que espelha a FakeStoreAPI, feita em Node.js + Express, usando b
 - `PUT /products/:id` – atualiza produto
 - `DELETE /products/:id` – remove produto
 
+## Rotas v2 com autenticação (JWT)
+
+Fluxo básico:
+
+1. Registrar usuário
+2. Fazer login para obter o token JWT
+3. Usar o token em `Authorization: Bearer <token>` para acessar `/v2/products`
+
+Rotas:
+
+- `POST /v2/users/register` – cadastra usuário (`email`, `password`)
+- `POST /v2/users/login` – retorna `{ token }` (JWT)
+- `GET /v2/users/me` – retorna dados do usuário logado (teste do token)
+- `GET /v2/products` – lista produtos (exige JWT)
+- `GET /v2/products/:id` – detalhe (exige JWT)
+- `POST /v2/products` – cria produto (exige JWT)
+- `PUT /v2/products/:id` – atualiza produto (exige JWT)
+- `DELETE /v2/products/:id` – remove produto (exige JWT)
+
+Exemplo de registro:
+
+```http
+POST /v2/users/register
+Content-Type: application/json
+
+{
+  "email": "prof@exemplo.com",
+  "password": "123456"
+}
+```
+
+Exemplo de login:
+
+```http
+POST /v2/users/login
+Content-Type: application/json
+
+{
+  "email": "prof@exemplo.com",
+  "password": "123456"
+}
+```
+
+Resposta:
+
+```json
+{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+```
+
+Depois, use o token:
+
+```http
+GET /v2/products
+Authorization: Bearer SEU_TOKEN_AQUI
+```
+
 ## Como rodar localmente
 
 1. Instale as dependências:

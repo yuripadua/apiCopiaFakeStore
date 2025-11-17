@@ -9,7 +9,10 @@ if (!process.env.DATABASE_URL) {
 const sql = neon(process.env.DATABASE_URL);
 
 module.exports = {
-  // Mantém a mesma interface db.query(text, params)
-  query: (text, params) => sql(text, params)
+  // Mantém a mesma interface db.query(text, params) retornando { rows }
+  query: async (text, params) => {
+    const rows = await sql(text, params);
+    return { rows };
+  }
 };
 

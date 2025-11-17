@@ -4,7 +4,6 @@ require('dotenv').config();
 
 const db = require('./db');
 const productsRoutes = require('./productsRoutes');
-const productsData = require('./productsData');
 
 const app = express();
 
@@ -22,7 +21,7 @@ app.get('/', (req, res) => {
 // Rotas de produtos
 app.use('/products', productsRoutes);
 
-// Cria tabela se não existir e faz seed inicial se estiver vazia
+// Cria tabela se não existir (seed é feito pelo script src/seed.js)
 async function ensureDatabaseSetup() {
   await db.query(`
     CREATE TABLE IF NOT EXISTS products (
@@ -36,29 +35,6 @@ async function ensureDatabaseSetup() {
       rating_count INTEGER DEFAULT 0
     );
   `);
-
-  const existing = await db.query('SELECT COUNT(*) AS count FROM products');
-  const count = Number(existing.rows[0].count);
-
-  if (count === 0) {
-    for (const p of productsData) {
-      await db.query(
-        `INSERT INTO products (id, title, price, description, category, image, rating_rate, rating_count)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [
-          p.id,
-          p.title,
-          p.price,
-          p.description,
-          p.category,
-          p.image,
-          p.rating_rate,
-          p.rating_count
-        ]
-      );
-    }
-    console.log('Seed inicial concluído com 20 produtos.');
-  }
 }
 
 const port = process.env.PORT || 3000;

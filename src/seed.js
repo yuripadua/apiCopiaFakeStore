@@ -42,6 +42,14 @@ async function seed() {
       console.log(`Tabela products já possui ${count} registros. Nenhum insert realizado.`);
     }
 
+    // Garante que a sequence do SERIAL esteja alinhada com o maior id existente
+    await db.query(`
+      SELECT setval(
+        pg_get_serial_sequence('products', 'id'),
+        COALESCE((SELECT MAX(id) FROM products), 1)
+      );
+    `);
+
     await db.query('COMMIT');
   } catch (err) {
     console.error('Erro ao rodar seed:', err);
@@ -52,4 +60,3 @@ async function seed() {
 }
 
 seed();
-

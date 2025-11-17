@@ -1,7 +1,7 @@
 {
   "name": "api-copia-fakestore",
   "version": "1.0.0",
-  "description": "API pedagógica que espelha a FakeStoreAPI usando Node, Express e Vercel Postgres",
+  "description": "API pedagógica que espelha a FakeStoreAPI usando Node, Express e Neon Postgres",
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
@@ -9,7 +9,7 @@
     "seed": "node src/seed.js"
   },
   "dependencies": {
-    "@vercel/postgres": "^0.9.0",
+    "@neondatabase/serverless": "^0.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
@@ -18,4 +18,3 @@
     "nodemon": "^3.1.0"
   }
 }
-

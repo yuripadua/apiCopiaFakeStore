@@ -1,11 +1,15 @@
-const { Pool } = require('@vercel/postgres');
+const { neon } = require('@neondatabase/serverless');
 require('dotenv').config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL não definida. Configure no .env ou nas variáveis da Vercel.');
+}
+
+// Conexão serverless com o Neon usando a connection string
+const sql = neon(process.env.DATABASE_URL);
 
 module.exports = {
-  query: (text, params) => pool.query(text, params)
+  // Mantém a mesma interface db.query(text, params)
+  query: (text, params) => sql(text, params)
 };
 

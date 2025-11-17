@@ -35,6 +35,14 @@ async function ensureDatabaseSetup() {
       rating_count INTEGER DEFAULT 0
     );
   `);
+
+  // Garante que a sequence do SERIAL esteja alinhada com o maior id
+  await db.query(`
+    SELECT setval(
+      pg_get_serial_sequence('products', 'id'),
+      COALESCE((SELECT MAX(id) FROM products), 1)
+    );
+  `);
 }
 
 const port = process.env.PORT || 3000;
